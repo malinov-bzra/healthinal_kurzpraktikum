@@ -1,0 +1,25 @@
+[versions]
+kotlin = "2.1.20-RC2"
+postgresql = "42.7.5"
+springboot = "3.4.3"
+
+[libraries]
+apache-poi-ooxml = "org.apache.poi:poi-ooxml:5.4.0"
+#archunit = "com.tngtech.archunit:archunit-junit5:1.4.0"
+jackson-module-kotlin = { module = "com.fasterxml.jackson.module:jackson-module-kotlin" }
+postgresql = { module = "org.postgresql:postgresql", version.ref = "postgresql" }
+spring-boot-configuration-processor = { module = "org.springframework.boot:spring-boot-configuration-processor", version.ref = "springboot" }
+spring-boot-dependencies = { module = "org.springframework.boot:spring-boot-dependencies", version.ref = "springboot" }
+spring-boot-starter-actuator = { module = "org.springframework.boot:spring-boot-starter-actuator" }
+spring-boot-starter-test = { module = "org.springframework.boot:spring-boot-starter-test" }
+spring-boot-starter-web = { module = "org.springframework.boot:spring-boot-starter-web" }
+kotlin-reflect = { module = "org.jetbrains.kotlin:kotlin-reflect" }
+
+[plugins]
+detekt = "io.gitlab.arturbosch.detekt:1.23.8"
+kotlin-jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }
+kotlin-plugin-spring = { id = "org.jetbrains.kotlin.plugin.spring", version.ref = "kotlin" }
+ktfmt = "com.ncorti.ktfmt.gradle:0.22.0"
+springframework-boot = { id = "org.springframework.boot", version.ref = "springboot" }
+version-catalog-update = "nl.littlerobots.version-catalog-update:0.8.5"
+versions = "com.github.ben-manes.versions:0.52.0"

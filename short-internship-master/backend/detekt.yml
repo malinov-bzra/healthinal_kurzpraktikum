@@ -1,0 +1,163 @@
+complexity:
+  active: true
+  LargeClass:
+    active: true
+    threshold: 300
+    excludes: ['**/test/**']
+  LongMethod:
+    active: true
+    threshold: 50
+    excludes: ['**/test/**']
+  LongParameterList:
+    active: false
+  NamedArguments:
+    active: true
+    threshold: 3
+  TooManyFunctions:
+    active: true
+    ignorePrivate: true
+    ignoreOverridden: true
+    excludes: ['**/test/**']
+  ComplexCondition:
+    active: true
+    threshold: 5
+
+exceptions:
+  active: true
+  ObjectExtendsThrowable:
+    active: true
+
+naming:
+  active: true
+  InvalidPackageDeclaration:
+    active: true
+    excludes: ["**/*.kts"]
+    rootPackage: ""
+  VariableNaming:
+    active: true
+    excludes: ["**/test/**"]
+    variablePattern: "[a-z][A-Za-z0-9]*"
+    privateVariablePattern: "(_)?[a-z][A-Za-z0-9]*"
+    excludeClassPattern: "$^"
+
+performance:
+  active: true
+  SpreadOperator:
+    active: true
+    excludes:
+      [ "**/test/**", "**/*Application.kt" ]
+
+potential-bugs:
+  active: true
+  AvoidReferentialEquality:
+    active: false
+    forbiddenTypePatterns:
+      - "kotlin.String"
+  CastNullableToNonNullableType:
+    active: true
+  CastToNullableType:
+    active: true
+  Deprecation:
+    active: true
+  DontDowncastCollectionTypes:
+    active: true
+  ExitOutsideMain:
+    active: true
+  HasPlatformType:
+    active: false
+  IgnoredReturnValue:
+    active: false
+    restrictToConfig: true
+  LateinitUsage:
+    active: true
+    excludes: ['**/test/**']
+  UnconditionalJumpStatementInLoop:
+    active: true
+
+style:
+  active: true
+  # formatting is handled by ktfmt
+  BracesOnIfStatements:
+    active: false
+  # formatting is handled by ktfmt
+  BracesOnWhenStatements:
+    active: false
+  ClassOrdering:
+    active: true
+  CollapsibleIfStatements:
+    active: true
+  DataClassContainsFunctions:
+    active: true
+    conversionFunctionPrefix:
+      - "to"
+  DataClassShouldBeImmutable:
+    active: true
+  # formatting is handled by ktfmt
+  EqualsOnSignatureLine:
+    active: false
+  ExpressionBodySyntax:
+    active: true
+    includeLineWrapping: true
+  ForbiddenImport:
+    active: true
+    imports:
+      - value: "org.junit.Test"
+        reason: "Junit 4 is deprecated (but needs to be on the classpath for Testcontainers)"
+  MagicNumber:
+    active: true
+    excludes: ['**/test/**']
+    ignoreNumbers:
+      - "-1"
+      - "0"
+      - "1"
+      - "2"
+      - "3"
+      - "365"
+      - "512"
+      - "1024"
+  MandatoryBracesLoops:
+    active: true
+  NoTabs:
+    active: true
+  OptionalUnit:
+    active: false
+  PreferToOverPairSyntax:
+    active: true
+  RedundantExplicitType:
+    active: true
+  RedundantVisibilityModifierRule:
+    active: false
+  ReturnCount:
+    active: true
+    excludeGuardClauses: true
+  # formatting is handled by ktfmt
+  SpacingBetweenPackageAndImports:
+    active: false
+  TrailingWhitespace:
+    active: true
+  UnderscoresInNumericLiterals:
+    active: true
+    acceptableLength: 5
+  UnnecessaryAnnotationUseSiteTarget:
+    active: true
+  UnnecessaryLet:
+    active: true
+  # unused imports are removed by ktfmt
+  UnusedImports:
+    active: false
+  UnusedPrivateMember:
+    active: true
+    allowedNames: '(_|ignored|expected)'
+  UseDataClass:
+    active: true
+    allowVars: false
+  UseIfEmptyOrIfBlank:
+    active: true
+  UseIfInsteadOfWhen:
+    active: true
+  # formatting is handled by ktfmt
+  MaxLineLength:
+    active: false
+  ThrowsCount:
+    active: true
+    max: 3
