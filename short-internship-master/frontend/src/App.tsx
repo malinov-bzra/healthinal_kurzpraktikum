@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Button, Avatar, Reshaped } from "reshaped/bundle";
 import "reshaped/bundle.css";
 import "reshaped/themes/slate/theme.css";
@@ -18,11 +18,20 @@ export function App() {
   const [sleep, setSleep] = useState("");
   const [showSleepInput, setShowSleepInput] = useState(false);
 
+  const [darkMode, setDarkMode] = useState(() => {
+    return localStorage.getItem("theme") === "dark";
+  });
+
+  useEffect(() => {
+    document.body.classList.toggle("dark", darkMode);
+    localStorage.setItem("theme", darkMode ? "dark" : "light");
+  }, [darkMode]);
+
   return (
     <Reshaped theme="slate">
       <div className="page">
         <h1>Hallo Benutzer!</h1>
-        <p>Hier deine heutigen Daten:</p>
+        <p>Deine heutigen Daten:</p>
       </div>
 
       <div className="cards">
@@ -46,7 +55,6 @@ export function App() {
             </Button>
             <Button
               size="small"
-              variant="outline"
               onClick={() => setShowWeightInput(true)}
             >
               Bearbeiten
@@ -54,7 +62,6 @@ export function App() {
             <Button
               size="small"
               variant="outline"
-              onClick={() => setShowWeightInput(true)}
             >
               Statistiken
             </Button>
@@ -81,16 +88,11 @@ export function App() {
             </Button>
             <Button
               size="small"
-              variant="outline"
               onClick={() => setShowStepsInput(true)}
             >
               Bearbeiten
             </Button>
-            <Button
-              size="small"
-              variant="outline"
-              onClick={() => setShowStepsInput(true)}
-            >
+            <Button size="small" variant="outline">
               Statistiken
             </Button>
           </div>
@@ -116,16 +118,11 @@ export function App() {
             </Button>
             <Button
               size="small"
-              variant="outline"
               onClick={() => setShowWaterInput(true)}
             >
               Bearbeiten
             </Button>
-            <Button
-              size="small"
-              variant="outline"
-              onClick={() => setShowWeightInput(true)}
-            >
+            <Button size="small" variant="outline">
               Statistiken
             </Button>
           </div>
@@ -151,20 +148,22 @@ export function App() {
             </Button>
             <Button
               size="small"
-              variant="outline"
               onClick={() => setShowSleepInput(true)}
             >
               Bearbeiten
             </Button>
-            <Button
-              size="small"
-              variant="outline"
-              onClick={() => setShowWeightInput(true)}
-            >
+            <Button size="small" variant="outline">
               Statistiken
             </Button>
           </div>
         </div>
+      </div>
+
+      <div className="summary">
+        {weight && <p>Heute wiegst du {weight} kg.</p>}
+        {steps && <p>Heute hast du {steps} Schritte gemacht.</p>}
+        {water && <p>Du hast heute {water} l Wasser getrunken.</p>}
+        {sleep && <p>Dein Schlaf ging heute {sleep} h.</p>}
       </div>
 
       <div className="avatar">
@@ -176,7 +175,9 @@ export function App() {
       </div>
 
       <div className="themeButton">
-        <Button>Lightmode</Button>
+        <Button onClick={() => setDarkMode(!darkMode)}>
+          {darkMode ? "🌙" : "☀️"}
+        </Button>
       </div>
     </Reshaped>
   );
