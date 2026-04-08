@@ -2,6 +2,8 @@
 kotlin = "2.1.20-RC2"
 postgresql = "42.7.5"
 springboot = "3.4.3"
+mysql = "8.3.0"
+
 
 [libraries]
 apache-poi-ooxml = "org.apache.poi:poi-ooxml:5.4.0"
@@ -14,6 +16,11 @@ spring-boot-starter-actuator = { module = "org.springframework.boot:spring-boot-
 spring-boot-starter-test = { module = "org.springframework.boot:spring-boot-starter-test" }
 spring-boot-starter-web = { module = "org.springframework.boot:spring-boot-starter-web" }
 kotlin-reflect = { module = "org.jetbrains.kotlin:kotlin-reflect" }
+
+spring-boot-starter-data-jpa = { module = "org.springframework.boot:spring-boot-starter-data-jpa" }
+mysql-connector = { module = "com.mysql:mysql-connector-j", version = "8.3.0" }
+
+
 
 [plugins]
 detekt = "io.gitlab.arturbosch.detekt:1.23.8"
