@@ -1,20 +1,22 @@
 import { useState, useEffect } from "react";
-import { Button, Avatar, Reshaped } from "reshaped/bundle";
+import { Button,  Reshaped } from "reshaped/bundle";
+import axios from "axios";
 import "reshaped/bundle.css";
 import "reshaped/themes/slate/theme.css";
 import "./App.css";
-import avatarImage from "./images/basic_avatar.jpg";
+
+const api = axios.create({
+  baseURL: "http://localhost:8040/health-metrics",
+});
 
 export function App() {
+  const [userId, setUserId] = useState("Nicholas");
   const [weight, setWeight] = useState("");
   const [showWeightInput, setShowWeightInput] = useState(false);
-
   const [steps, setSteps] = useState("");
   const [showStepsInput, setShowStepsInput] = useState(false);
-
   const [water, setWater] = useState("");
   const [showWaterInput, setShowWaterInput] = useState(false);
-
   const [sleep, setSleep] = useState("");
   const [showSleepInput, setShowSleepInput] = useState(false);
 
@@ -27,19 +29,54 @@ export function App() {
     localStorage.setItem("theme", darkMode ? "dark" : "light");
   }, [darkMode]);
 
+  const handleSave = async () => {
+    try {
+      const payload = {
+        user_id: userId,
+        weight: parseFloat(weight) || 0,
+        steps: parseInt(steps) || 0,
+        water: parseFloat(water) || 0,
+        sleep: parseFloat(sleep) || 0,
+      };
+
+      await api.post("", payload);
+      alert("Daten erfolgreich an Backend gesendet!");
+
+      setShowWeightInput(false);
+      setShowStepsInput(false);
+      setShowWaterInput(false);
+      setShowSleepInput(false);
+    } catch (error) {
+      console.error("Fehler beim Speichern:", error);
+      alert("Fehler beim Senden der Daten.");
+    }
+  };
+
   return (
     <Reshaped theme="slate">
       <div className="page">
-        <h1>Hallo Benutzer!</h1>
+        {/* HIER gehört der User-Switch jetzt hin! */}
+        <div className="user-switch-container" style={{ marginBottom: "20px" }}>
+          <span>Nutzer: </span>
+          <input
+            className="user-input"
+            type="text"
+            value={userId}
+            onChange={(e) => setUserId(e.target.value)}
+            placeholder="ID eingeben..."
+          />
+        </div>
+
+        <h1>Hallo {userId}!</h1>
         <p>Deine heutigen Daten:</p>
       </div>
 
       <div className="cards">
+        {/* Gewicht */}
         <div className="card">
           <div className="cardTitle">
             Gewicht: {weight ? `${weight} kg` : "...kg"}
           </div>
-
           {showWeightInput && (
             <input
               type="number"
@@ -48,31 +85,19 @@ export function App() {
               placeholder="Gewicht eingeben"
             />
           )}
-
           <div className="cardActions">
             <Button size="small" onClick={() => setShowWeightInput(true)}>
-              Erfassen
+              Erstellen
             </Button>
-            <Button
-              size="small"
-              onClick={() => setShowWeightInput(true)}
-            >
-              Bearbeiten
-            </Button>
-            <Button
-              size="small"
-              variant="outline"
-            >
-              Statistiken
-            </Button>
+            <Button size="small" variant="outline">Statistiken</Button>
           </div>
         </div>
 
+        {/* Schritte */}
         <div className="card">
           <div className="cardTitle">
             Schritte: {steps ? `${steps} Schritte` : "...Schritte"}
           </div>
-
           {showStepsInput && (
             <input
               type="number"
@@ -81,28 +106,19 @@ export function App() {
               placeholder="Schritte eingeben"
             />
           )}
-
           <div className="cardActions">
             <Button size="small" onClick={() => setShowStepsInput(true)}>
-              Erfassen
+              Erstellen
             </Button>
-            <Button
-              size="small"
-              onClick={() => setShowStepsInput(true)}
-            >
-              Bearbeiten
-            </Button>
-            <Button size="small" variant="outline">
-              Statistiken
-            </Button>
+            <Button size="small" variant="outline">Statistiken</Button>
           </div>
         </div>
 
+        {/* Wasser */}
         <div className="card">
           <div className="cardTitle">
-            Wasseraufnahmen: {water ? `${water} l` : "...l"}
+            Wasser: {water ? `${water} l` : "...l"}
           </div>
-
           {showWaterInput && (
             <input
               type="number"
@@ -111,28 +127,19 @@ export function App() {
               placeholder="Wasseraufnahme eingeben"
             />
           )}
-
           <div className="cardActions">
             <Button size="small" onClick={() => setShowWaterInput(true)}>
-              Erfassen
+              Erstellen
             </Button>
-            <Button
-              size="small"
-              onClick={() => setShowWaterInput(true)}
-            >
-              Bearbeiten
-            </Button>
-            <Button size="small" variant="outline">
-              Statistiken
-            </Button>
+            <Button size="small" variant="outline">Statistiken</Button>
           </div>
         </div>
 
+        {/* Schlaf */}
         <div className="card">
           <div className="cardTitle">
             Schlaf: {sleep ? `${sleep} h` : "...h"}
           </div>
-
           {showSleepInput && (
             <input
               type="number"
@@ -141,37 +148,24 @@ export function App() {
               placeholder="Schlaf eingeben"
             />
           )}
-
           <div className="cardActions">
             <Button size="small" onClick={() => setShowSleepInput(true)}>
-              Erfassen
+              Erstellen
             </Button>
-            <Button
-              size="small"
-              onClick={() => setShowSleepInput(true)}
-            >
-              Bearbeiten
-            </Button>
-            <Button size="small" variant="outline">
-              Statistiken
-            </Button>
+            <Button size="small" variant="outline">Statistiken</Button>
           </div>
         </div>
       </div>
 
-      <div className="summary">
-        {weight && <p>Heute wiegst du {weight} kg.</p>}
-        {steps && <p>Heute hast du {steps} Schritte gemacht.</p>}
-        {water && <p>Du hast heute {water} l Wasser getrunken.</p>}
-        {sleep && <p>Dein Schlaf ging heute {sleep} h.</p>}
-      </div>
-
-      <div className="avatar">
-        <Avatar src={avatarImage} />
-      </div>
-
-      <div className="kiButton">
-        <Button>KI-Button</Button>
+      <div className="saveContainer" style={{ textAlign: "center", margin: "20px" }}>
+        <Button
+          color="primary"
+          size="large"
+          onClick={handleSave}
+          disabled={!weight && !steps && !water && !sleep}
+        >
+          Daten senden
+        </Button>
       </div>
 
       <div className="themeButton">
