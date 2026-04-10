@@ -42,10 +42,18 @@ export function App() {
       );
       setHistory(sortedData);
     } catch (err) {
-      console.error("Fehler beim Laden:", err);
+      console.error(err);
       setHistory([]);
     }
   };
+
+  const latestEntry = history.length > 0 ? history[history.length - 1] : null;
+  const sleepAdvice =
+    latestEntry && latestEntry.sleep < 7 ? "Du solltest mehr schlafen!" : "Mach weiter so!";
+  const waterAdvice =
+  latestEntry && latestEntry.water < 2 ? "Du solltest mehr Wasser trinken!" : "";
+
+
 
   useEffect(() => {
     if (searchUserId) fetchHistory();
@@ -54,7 +62,6 @@ export function App() {
   const getStatusColor = (type: string, val: string): string => {
     const value = parseFloat(val);
     if (isNaN(value) || value === 0) return "#64748b";
-
     switch (type) {
       case "sleep":
         if (value >= 7) return "#10b981";
@@ -86,7 +93,7 @@ export function App() {
       setWeight(""); setSteps(""); setWater(""); setSleep("");
       fetchHistory();
     } catch (err) {
-      console.error("Speichern fehlgeschlagen:", err);
+      console.error(err);
     }
   };
 
@@ -117,33 +124,43 @@ export function App() {
       <div className="app-container">
         <header className="app-header">
           <div className="user-pill">
-            <span>Daten für:</span>
+            <span className="pill-label">Daten für:</span>
             <input type="text" value={activeUserId} onChange={(e) => setActiveUserId(e.target.value)} placeholder="Name..." />
           </div>
-          <h1>Hallo{activeUserId ? `, ${activeUserId}` : "!"} 👋</h1>
+          <h1 className="welcome-title">Hallo{activeUserId ? ` ${activeUserId}` : "..."}! </h1>
         </header>
 
         <div className="main-grid">
           {[
-            { id: "weight", label: "Gewicht", unit: "kg", val: weight, set: setWeight, icon: "⚖️", color: "#3b82f6" },
-            { id: "steps", label: "Schritte", unit: "Steps", val: steps, set: setSteps, icon: "👟", color: "#10b981" },
-            { id: "water", label: "Wasser", unit: "L", val: water, set: setWater, icon: "💧", color: "#0ea5e9" },
-            { id: "sleep", label: "Schlaf", unit: "h", val: sleep, set: setSleep, icon: "🌙", color: "#8b5cf6" }
+            { id: "weight", label: "Gewicht", unit: "kg", val: weight, set: setWeight,  color: "#3b82f6" },
+            { id: "steps", label: "Schritte", unit: "Steps", val: steps, set: setSteps,  color: "#10b981" },
+            { id: "water", label: "Wasser", unit: "L", val: water, set: setWater, color: "#0ea5e9" },
+            { id: "sleep", label: "Schlaf", unit: "h", val: sleep, set: setSleep,  color: "#8b5cf6" }
           ].map((item) => (
             <div className={`glass-card ${showStats === item.id ? 'expanded' : ''}`} key={item.id}>
               <div className="card-top">
-                <span className="card-icon">{item.icon}</span>
                 <span className="card-label">{item.label}</span>
               </div>
               <div className="input-group">
                 <input type="number" value={item.val} onChange={(e) => item.set(e.target.value)} placeholder={`0 ${item.unit}`} />
                 <div className="card-actions">
                   <Button variant="ghost" size="small" onClick={() => setShowStats(showStats === item.id ? null : item.id)}>
-                    {showStats === item.id ? "Schließen" : "Statistiken"}
+                    {showStats === item.id ? "Schliessen" : "Statistiken"}
                   </Button>
                 </div>
               </div>
               {showStats === item.id && renderChart(item.id, item.unit, item.color)}
+              {item.id === "sleep" && sleepAdvice && showStats === "sleep" && (
+                <p style={{ marginTop: "12px", color: "#ef4444", fontWeight: 600 }}>
+                  {sleepAdvice}
+                </p>
+                
+              )}
+              {item.id === "water" && waterAdvice && showStats === "water" && (
+                <p style={{ marginTop: "12px", color: "#ef4444", fontWeight: 600 }}>
+                  {waterAdvice}
+                </p>
+              )}
             </div>
           ))}
         </div>
@@ -165,9 +182,9 @@ export function App() {
 
         <section className="history-section">
           <div className="history-header">
-            <h2>Historie</h2>
+            <h2>Verlauf</h2>
             <div className="search-pill">
-              <input type="text" value={searchUserId} onChange={(e) => setSearchUserId(e.target.value)} placeholder="User suchen..." />
+              <input type="text" className="history-search-input" value={searchUserId} onChange={(e) => setSearchUserId(e.target.value)} placeholder="User suchen..." />
             </div>
           </div>
           <div className="table-wrapper">
