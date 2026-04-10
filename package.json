@@ -1,0 +1,6 @@
+{
+  "dependencies": {
+    "axios": "^1.15.0",
+    "reshaped": "^3.10.2"
+  }
+}
