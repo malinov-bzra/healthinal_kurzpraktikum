@@ -48,10 +48,14 @@ export function App() {
   };
 
   const latestEntry = history.length > 0 ? history[history.length - 1] : null;
+
   const sleepAdvice =
     latestEntry && latestEntry.sleep < 7 ? "Du solltest mehr schlafen!" : "Mach weiter so!";
   const waterAdvice =
-  latestEntry && latestEntry.water < 2 ? "Du solltest mehr Wasser trinken!" : "";
+    latestEntry && latestEntry.water < 2 ? "Du solltest mehr Wasser trinken!" : "Mach weiter so!";
+  const stepsAdvice =
+    latestEntry && latestEntry.steps < 5000 ? "Du solltest mehr Schritte machen!" : "Mach weiter so!";
+
 
 
 
@@ -159,6 +163,11 @@ export function App() {
               {item.id === "water" && waterAdvice && showStats === "water" && (
                 <p style={{ marginTop: "12px", color: "#ef4444", fontWeight: 600 }}>
                   {waterAdvice}
+                </p>
+              )}
+              {item.id === "steps" && waterAdvice && showStats === "steps" && (
+                <p style={{ marginTop: "12px", color: "#ef4444", fontWeight: 600 }}>
+                  {stepsAdvice}
                 </p>
               )}
             </div>
