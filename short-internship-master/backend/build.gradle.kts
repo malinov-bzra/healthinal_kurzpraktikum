@@ -23,12 +23,14 @@ repositories { mavenCentral() }
 dependencies {
     // enforce usage of spring boot dependency versions for all libraries
     api(enforcedPlatform(libs.spring.boot.dependencies))
-
+    implementation(platform( libs.spring.ai.bom))
     implementation(libs.spring.boot.starter.actuator)
     implementation(libs.spring.boot.starter.web)
     implementation(libs.jackson.module.kotlin)
     implementation(libs.kotlin.reflect)
     implementation(libs.apache.poi.ooxml)
+    implementation(libs.spring.ai.starter.model.mistral.ai)
+
 
     testImplementation(libs.spring.boot.starter.test)
 
@@ -36,8 +38,11 @@ dependencies {
 
     annotationProcessor(libs.spring.boot.configuration.processor)
 
+
     implementation("org.springframework.boot:spring-boot-starter-data-jpa")
     runtimeOnly("com.mysql:mysql-connector-j")
+
+
 }
 
 kotlin {

@@ -3,9 +3,12 @@ kotlin = "2.1.20-RC2"
 postgresql = "42.7.5"
 springboot = "3.4.3"
 mysql = "8.3.0"
+spring-ai = "1.0.0"
 
 
 [libraries]
+spring-ai-bom = { module = "org.springframework.ai:spring-ai-bom", version.ref = "spring-ai" }
+spring-ai-starter-model-mistral-ai = { module = "org.springframework.ai:spring-ai-starter-model-mistral-ai" }
 apache-poi-ooxml = "org.apache.poi:poi-ooxml:5.4.0"
 #archunit = "com.tngtech.archunit:archunit-junit5:1.4.0"
 jackson-module-kotlin = { module = "com.fasterxml.jackson.module:jackson-module-kotlin" }
@@ -17,8 +20,13 @@ spring-boot-starter-test = { module = "org.springframework.boot:spring-boot-star
 spring-boot-starter-web = { module = "org.springframework.boot:spring-boot-starter-web" }
 kotlin-reflect = { module = "org.jetbrains.kotlin:kotlin-reflect" }
 
+
 spring-boot-starter-data-jpa = { module = "org.springframework.boot:spring-boot-starter-data-jpa" }
 mysql-connector = { module = "com.mysql:mysql-connector-j", version = "8.3.0" }
+
+
+
+
 
 
 

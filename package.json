@@ -1,5 +1,6 @@
 {
   "dependencies": {
+    "@mistralai/mistralai": "^2.2.0",
     "axios": "^1.15.0",
     "reshaped": "^3.10.2"
   }

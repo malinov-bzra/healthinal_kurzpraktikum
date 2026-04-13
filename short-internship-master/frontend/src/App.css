@@ -1,3 +1,25 @@
+html,
+body,
+#root {
+  margin: 0;
+  min-height: 100%;
+  width: 100%;
+}
+
+body {
+  overflow-x: hidden;
+}
+
+body.app-light,
+body.app-light #root {
+  background: #f8fafc;
+}
+
+body.app-dark,
+body.app-dark #root {
+  background: #0f172a;
+}
+
 :root {
   --bg-light: #f4f7f6;
   --bg-dark: #323530;
