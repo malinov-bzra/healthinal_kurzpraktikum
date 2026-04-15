@@ -138,7 +138,7 @@ function AppContent() {
       setAnalysisResult(response.data.analysis);
     } catch (e) {
       console.error(e);
-      setAnalysisResult('Analyse derzeit nicht möglich.');
+      setAnalysisResult('Analyse leider fehlgeschlagen.');
     } finally {
       setIsAnalyzing(false);
     }
@@ -379,7 +379,7 @@ function AppContent() {
         {analysisResult && (
           <div className="analysis-result-box">
             <div className="analysis-header">
-              <h3>KI-Check 🩺</h3>
+              <h3>KI-Analyse</h3>
               <Button variant="ghost" size="small" onClick={() => setAnalysisResult('')}>
                 ×
               </Button>
