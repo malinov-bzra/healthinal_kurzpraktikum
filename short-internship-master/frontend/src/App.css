@@ -237,3 +237,32 @@ body.dark .modern-table td {
   bottom: 20px;
   right: 20px;
 }
+
+.KI-button-container {
+  position: fixed;
+  left: 20px;
+  bottom: 20px;
+  z-index: 1000;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 12px;
+}
+
+.KI-button-input-box {
+  min-width: 280px;
+  max-width: 320px;
+  padding: 12px;
+  border-radius: 16px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+  backdrop-filter: blur(12px);
+}
+
+.KI-button-input {
+  width: 100%;
+  padding: 10px 12px;
+  border-radius: 10px;
+  outline: none;
+  font-size: 14px;
+  box-sizing: border-box;
+}

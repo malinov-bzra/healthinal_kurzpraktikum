@@ -30,6 +30,11 @@ function AppContent() {
   const { colorMode, invertColorMode } = useTheme();
   const isDark = colorMode === "dark";
 
+  const [showKIButtonInput, setShowKIButtonInput] = useState(false);
+  const [KIButtonValue, setKIButtonInputValue] = useState("");
+  const [KIAnswer, setKIAnswer] = useState("");
+  const [KILoading, setKILoading] = useState(false);
+
   const [activeUserId, setActiveUserId] = useState("");
   const [weight, setWeight] = useState("");
   const [steps, setSteps] = useState("");
@@ -148,6 +153,22 @@ function AppContent() {
       fetchHistory(activeUserId);
     } catch (err) {
       console.error(err);
+    }
+  };
+
+  const askKI = async () => {
+    if (!KIButtonValue.trim()) return;
+    setKILoading(true);
+    setKIAnswer("");
+    try {
+      const response = await axios.get("http://localhost:8040/chat", {
+        params: { question: KIButtonValue },
+      });
+      setKIAnswer(response.data);
+    } catch {
+      setKIAnswer("Fehler.");
+    } finally {
+      setKILoading(false);
     }
   };
 
@@ -369,46 +390,46 @@ function AppContent() {
         <div className="table-wrapper">
           <table className="modern-table" style={{ color: colors.text }}>
             <thead>
-              <tr>
-                <th style={{ color: colors.text, borderBottomColor: colors.tableHeaderBorder }}>Datum</th>
-                <th style={{ color: colors.text, borderBottomColor: colors.tableHeaderBorder }}>Kilogramm</th>
-                <th style={{ color: colors.text, borderBottomColor: colors.tableHeaderBorder }}>Schritte</th>
-                <th style={{ color: colors.text, borderBottomColor: colors.tableHeaderBorder }}>Wasser</th>
-                <th style={{ color: colors.text, borderBottomColor: colors.tableHeaderBorder }}>Schlaf</th>
-              </tr>
+            <tr>
+              <th style={{ color: colors.text, borderBottomColor: colors.tableHeaderBorder }}>Datum</th>
+              <th style={{ color: colors.text, borderBottomColor: colors.tableHeaderBorder }}>Kilogramm</th>
+              <th style={{ color: colors.text, borderBottomColor: colors.tableHeaderBorder }}>Schritte</th>
+              <th style={{ color: colors.text, borderBottomColor: colors.tableHeaderBorder }}>Wasser</th>
+              <th style={{ color: colors.text, borderBottomColor: colors.tableHeaderBorder }}>Schlaf</th>
+            </tr>
             </thead>
             <tbody>
-              {history.length > 0 ? (
-                history
-                  .slice()
-                  .reverse()
-                  .slice(0, 5)
-                  .map((entry, i) => (
-                    <tr key={i}>
-                      <td style={{ color: colors.text, borderBottomColor: colors.tableRowBorder }}>
-                        {new Date(entry.createdAt).toLocaleDateString()}
-                      </td>
-                      <td style={{ color: colors.text, borderBottomColor: colors.tableRowBorder }}>
-                        {entry.weight}
-                      </td>
-                      <td style={{ color: colors.text, borderBottomColor: colors.tableRowBorder }}>
-                        {entry.steps}
-                      </td>
-                      <td style={{ color: colors.text, borderBottomColor: colors.tableRowBorder }}>
-                        {entry.water}
-                      </td>
-                      <td style={{ color: colors.text, borderBottomColor: colors.tableRowBorder }}>
-                        {entry.sleep}
-                      </td>
-                    </tr>
-                  ))
-              ) : (
-                <tr>
-                  <td colSpan={5} style={{ color: colors.mutedText }}>
-                    Keine Einträge gefunden
-                  </td>
-                </tr>
-              )}
+            {history.length > 0 ? (
+              history
+                .slice()
+                .reverse()
+                .slice(0, 5)
+                .map((entry, i) => (
+                  <tr key={i}>
+                    <td style={{ color: colors.text, borderBottomColor: colors.tableRowBorder }}>
+                      {new Date(entry.createdAt).toLocaleDateString()}
+                    </td>
+                    <td style={{ color: colors.text, borderBottomColor: colors.tableRowBorder }}>
+                      {entry.weight}
+                    </td>
+                    <td style={{ color: colors.text, borderBottomColor: colors.tableRowBorder }}>
+                      {entry.steps}
+                    </td>
+                    <td style={{ color: colors.text, borderBottomColor: colors.tableRowBorder }}>
+                      {entry.water}
+                    </td>
+                    <td style={{ color: colors.text, borderBottomColor: colors.tableRowBorder }}>
+                      {entry.sleep}
+                    </td>
+                  </tr>
+                ))
+            ) : (
+              <tr>
+                <td colSpan={5} style={{ color: colors.mutedText }}>
+                  Keine Einträge gefunden
+                </td>
+              </tr>
+            )}
             </tbody>
           </table>
         </div>
@@ -419,11 +440,72 @@ function AppContent() {
           {isDark ? "☀️" : "🌙"}
         </Button>
       </div>
+
+      <div className="KI-button-container">
+        {showKIButtonInput && (
+          <div
+            className="KI-button-input-box"
+            style={{
+              background: colors.cardBg,
+              border: `1px solid ${colors.cardBorder}`,
+              color: colors.text,
+            }}
+          >
+            <input
+              type="text"
+              value={KIButtonValue}
+              onChange={(e) => setKIButtonInputValue(e.target.value)}
+              onKeyDown={(e) => {
+                if (e.key === "Enter") askKI();
+              }}
+              placeholder="KI fragen..."
+              className="KI-button-input"
+              style={{
+                background: colors.inputBg,
+                border: `1px solid ${colors.inputBorder}`,
+                color: colors.text,
+              }}
+            />
+            <Button
+              color="primary"
+              size="small"
+              onClick={askKI}
+              disabled={KILoading || !KIButtonValue.trim()}
+            >
+              {KILoading ? "Lädt..." : "Senden"}
+            </Button>
+
+            {KIAnswer && (
+              <div
+                style={{
+                  marginTop: "10px",
+                  padding: "10px",
+                  background: colors.summaryBg,
+                  borderRadius: "8px",
+                  fontSize: "14px",
+                  lineHeight: "1.6",
+                  color: colors.text,
+                  border: `1px solid ${colors.cardBorder}`,
+                }}
+              >
+                {KIAnswer}
+              </div>
+            )}
+          </div>
+        )}
+
+        <Button
+          color="primary"
+          onClick={() => {
+            setShowKIButtonInput((prev) => !prev);
+            setKIAnswer("");
+            setKIButtonInputValue("");
+          }}
+        >
+          {showKIButtonInput ? "Schliessen" : "Fragen?"}
+        </Button>
+      </div>
     </div>
-
-
-
-
   );
 }
 
