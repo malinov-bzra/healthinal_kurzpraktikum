@@ -19,3 +19,8 @@ data class HealthMetricResponse(
     val sleep: Float,
     val createdAt: String
 )
+
+data class AnalysisRequest(
+    val history: List<HealthMetricResponse>,
+    val userId: String
+)
