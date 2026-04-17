@@ -106,6 +106,22 @@ function AppContent() {
     }
   }, [activeUserId]);
 
+  const latestEntry = history.length > 0 ? history[history.length - 1] : null;
+
+  const getAdvice = (type: string): string | null => {
+    if (!latestEntry) return null;
+    switch (type) {
+      case 'sleep':
+        return latestEntry.sleep < 7 ? 'Versuche mindestens 7 Stunden zu schlafen!' : 'Weiter so!';
+      case 'water':
+        return latestEntry.water < 2 ? 'Trinke mehr Wasser — Ziel sind 2 Liter täglich!' : 'Weiter so!';
+      case 'steps':
+        return latestEntry.steps < 5000 ? 'Versuche mehr zu laufen — Ziel sind 10.000 Schritte!' : 'Weiter so!';
+      default:
+        return null;
+    }
+  };
+
   const handleSave = async () => {
     try {
       const payload = {
@@ -287,6 +303,16 @@ function AppContent() {
               </div>
             </div>
             {showStats === item.id && renderChart(item.id, item.unit, item.color)}
+            {showStats === item.id && item.id !== 'weight' && getAdvice(item.id) && (
+              <p style={{
+                marginTop: '10px',
+                fontSize: '13px',
+                color: getAdvice(item.id) === 'Weiter so!' ? '#22c55e' : '#f59e0b',
+                fontWeight: 500,
+              }}>
+                {getAdvice(item.id)}
+              </p>
+            )}
           </div>
         ))}
       </div>
@@ -334,38 +360,38 @@ function AppContent() {
         <div className="table-wrapper">
           <table className="modern-table" style={{ color: colors.text }}>
             <thead>
-              <tr>
-                <th style={{ color: colors.text, borderBottomColor: colors.tableHeaderBorder }}>Datum</th>
-                <th style={{ color: colors.text, borderBottomColor: colors.tableHeaderBorder }}>Kilogramm</th>
-                <th style={{ color: colors.text, borderBottomColor: colors.tableHeaderBorder }}>Schritte</th>
-                <th style={{ color: colors.text, borderBottomColor: colors.tableHeaderBorder }}>Wasser</th>
-                <th style={{ color: colors.text, borderBottomColor: colors.tableHeaderBorder }}>Schlaf</th>
-              </tr>
+            <tr>
+              <th style={{ color: colors.text, borderBottomColor: colors.tableHeaderBorder }}>Datum</th>
+              <th style={{ color: colors.text, borderBottomColor: colors.tableHeaderBorder }}>Kilogramm</th>
+              <th style={{ color: colors.text, borderBottomColor: colors.tableHeaderBorder }}>Schritte</th>
+              <th style={{ color: colors.text, borderBottomColor: colors.tableHeaderBorder }}>Wasser</th>
+              <th style={{ color: colors.text, borderBottomColor: colors.tableHeaderBorder }}>Schlaf</th>
+            </tr>
             </thead>
             <tbody>
-              {history.length > 0 ? (
-                history
-                  .slice()
-                  .reverse()
-                  .slice(0, 5)
-                  .map((entry, i) => (
-                    <tr key={i}>
-                      <td style={{ color: colors.text, borderBottomColor: colors.tableRowBorder }}>
-                        {new Date(entry.createdAt).toLocaleDateString()}
-                      </td>
-                      <td style={{ color: colors.text, borderBottomColor: colors.tableRowBorder }}>{entry.weight}</td>
-                      <td style={{ color: colors.text, borderBottomColor: colors.tableRowBorder }}>{entry.steps}</td>
-                      <td style={{ color: colors.text, borderBottomColor: colors.tableRowBorder }}>{entry.water}</td>
-                      <td style={{ color: colors.text, borderBottomColor: colors.tableRowBorder }}>{entry.sleep}</td>
-                    </tr>
-                  ))
-              ) : (
-                <tr>
-                  <td colSpan={5} style={{ color: colors.mutedText }}>
-                    Keine Einträge gefunden
-                  </td>
-                </tr>
-              )}
+            {history.length > 0 ? (
+              history
+                .slice()
+                .reverse()
+                .slice(0, 5)
+                .map((entry, i) => (
+                  <tr key={i}>
+                    <td style={{ color: colors.text, borderBottomColor: colors.tableRowBorder }}>
+                      {new Date(entry.createdAt).toLocaleDateString()}
+                    </td>
+                    <td style={{ color: colors.text, borderBottomColor: colors.tableRowBorder }}>{entry.weight}</td>
+                    <td style={{ color: colors.text, borderBottomColor: colors.tableRowBorder }}>{entry.steps}</td>
+                    <td style={{ color: colors.text, borderBottomColor: colors.tableRowBorder }}>{entry.water}</td>
+                    <td style={{ color: colors.text, borderBottomColor: colors.tableRowBorder }}>{entry.sleep}</td>
+                  </tr>
+                ))
+            ) : (
+              <tr>
+                <td colSpan={5} style={{ color: colors.mutedText }}>
+                  Keine Einträge gefunden
+                </td>
+              </tr>
+            )}
             </tbody>
           </table>
         </div>
